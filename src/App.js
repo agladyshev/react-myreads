@@ -28,15 +28,15 @@ class Search extends React.Component {
   }
 }
 
-const Book = () => (
+const Book = (props) => (
   <li>
     <div className="book">
       <div className="book-top">
-        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")' }}></div>
+        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + props.url + ')' }}></div>
         <ShelfChanger />
       </div>
-      <div className="book-title">To Kill a Mockingbird</div>
-      <div className="book-authors">Harper Lee</div>
+      <div className="book-title">{props.title}</div>
+      <div className="book-authors">{props.author}</div>
     </div>
   </li>  
 );
@@ -60,9 +60,11 @@ class Bookshelf extends React.Component {
         <h2 className="bookshelf-title">Currently Reading</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            <Book />
-            <Book />
-            <Book />
+            <Book
+              title="To Kill a Mockingbird"
+              author="Harper Lee"
+              url="http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api"
+            />
           </ol>
         </div>
       </div>
@@ -105,5 +107,7 @@ class BooksApp extends React.Component {
     )
   }
 }
+
+
 
 export default BooksApp
