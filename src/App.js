@@ -33,7 +33,7 @@ const Book = (props) => (
     <div className="book">
       <div className="book-top">
         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + props.url + ')' }}></div>
-        <ShelfChanger />
+        <ShelfChanger shelf={props.shelf}/>
       </div>
       <div className="book-title">{props.title}</div>
       <div className="book-authors">{props.author}</div>
@@ -41,9 +41,9 @@ const Book = (props) => (
   </li>  
 );
 
-const ShelfChanger = () => (
+const ShelfChanger = (props) => (
   <div className="book-shelf-changer">
-    <select>
+    <select value={props.shelf}>
       <option value="none" disabled>Move to...</option>
       <option value="currentlyReading">Currently Reading</option>
       <option value="wantToRead">Want to Read</option>
@@ -64,6 +64,7 @@ class Bookshelf extends React.Component {
               title="To Kill a Mockingbird"
               author="Harper Lee"
               url="http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api"
+              shelf="read"
             />
           </ol>
         </div>
