@@ -32,11 +32,11 @@ const Book = (props) => (
   <li>
     <div className="book">
       <div className="book-top">
-        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + props.url + ')' }}></div>
-        <ShelfChanger shelf={props.shelf}/>
+        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + props.book.url + ')' }}></div>
+        <ShelfChanger shelf={props.book.shelf}/>
       </div>
-      <div className="book-title">{props.title}</div>
-      <div className="book-authors">{props.author}</div>
+      <div className="book-title">{props.book.title}</div>
+      <div className="book-authors">{props.book.author}</div>
     </div>
   </li>  
 );
@@ -53,19 +53,39 @@ const ShelfChanger = (props) => (
   </div>
 );
 
+const BOOKS = [
+  {
+    title: "To Kill a Mockingbird",
+    author: "Harper Lee",
+    url: "http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api",
+    shelf: "read"
+  },
+  {
+    title: '1776',
+    author: 'David McCullough',
+    url: 'http://books.google.com/books/content?id=uu1mC6zWNTwC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73pGHfBNSsJG9Y8kRBpmLUft9O4BfItHioHolWNKOdLavw-SLcXADy3CPAfJ0_qMb18RmCa7Ds1cTdpM3dxAGJs8zfCfm8c6ggBIjzKT7XR5FIB53HHOhnsT7a0Cc-PpneWq9zX&source=gbs_api',
+    shelf: 'read'
+  }
+]
+
 class Bookshelf extends React.Component {
   render() {
+    const shelf = [];
+    console.log(this.props.books);
+    this.props.books.forEach((book) => {
+      shelf.push(
+        <Book
+          book={book}
+          key={book.title}
+        />
+      );
+    });
     return (
       <div className="bookshelf">
         <h2 className="bookshelf-title">Currently Reading</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            <Book
-              title="To Kill a Mockingbird"
-              author="Harper Lee"
-              url="http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api"
-              shelf="read"
-            />
+            {shelf}
           </ol>
         </div>
       </div>
@@ -82,9 +102,7 @@ class Library extends React.Component {
         </div>
         <div className="list-books-content">
           <div>
-            <Bookshelf />
-            <Bookshelf />
-            <Bookshelf />
+            <Bookshelf books={BOOKS}/>
           </div>
         </div>
         <div className="open-search">
