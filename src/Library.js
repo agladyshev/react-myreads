@@ -4,46 +4,90 @@ import PropTypes from 'prop-types'
 
 import * as BooksAPI from './BooksAPI'
 
-const Book = (props) => (
-  <li>
-    <div className="book">
-      <div className="book-top">
-        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + props.img + ')' }}></div>
-        <ShelfChanger shelf={props.shelf}/>
-      </div>
-      <div className="book-title">{props.title}</div>
-      <div className="book-authors">{props.authors}</div>
-    </div>
-  </li>  
-);
+class Book extends React.Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    authors: PropTypes.array.isRequired,
+    shelf: PropTypes.string.isRequired,
+    img: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    handleShelfChange: PropTypes.func.isRequired
+  }
 
-Book.propTypes = {
-  title: PropTypes.string.isRequired,
-  authors: PropTypes.array.isRequired,
-  shelf: PropTypes.string.isRequired,
-  img: PropTypes.string.isRequired
+  constructor(props) {
+    super(props);
+    // this.state = {shelf: props.shelf};
+    this.handleShelfChange = this.handleShelfChange.bind(this);
+  }
+
+  handleShelfChange(shelf) {
+    this.props.handleShelfChange(shelf, this.props.id);
+  }
+
+  render () {
+    return (
+      <li>
+        <div className="book">
+          <div className="book-top">
+            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + this.props.img + ')' }}></div>
+            <ShelfChanger 
+              shelf={this.props.shelf}
+              onShelfChange={this.handleShelfChange}/>
+          </div>
+          <div className="book-title">{this.props.title}</div>
+          <div className="book-authors">{this.props.authors}</div>
+        </div>
+      </li>
+    );  
+  }
 }
 
-const ShelfChanger = (props) => (
-  <div className="book-shelf-changer">
-    <select value={props.shelf}>
-      <option value="none" disabled>Move to...</option>
-      <option value="currentlyReading">Currently Reading</option>
-      <option value="wantToRead">Want to Read</option>
-      <option value="read">Read</option>
-      <option value="none">None</option>
-    </select>
-  </div>
-);
+class ShelfChanger extends React.Component {
+  static propTypes = {
+    shelf: PropTypes.string.isRequired,
+    onShelfChange: PropTypes.func.isRequired
+  }
 
-ShelfChanger.propTypes = {
-  shelf: PropTypes.string.isRequired
+  constructor(props) {
+    super(props);
+    // this.state = {shelf: props.shelf};
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.props.onShelfChange(event.target.value);
+  }
+
+  render() {
+    return (
+      <div className="book-shelf-changer">
+        <select value={this.props.shelf} onChange={this.handleChange}>
+          <option value="none" disabled>Move to...</option>
+          <option value="currentlyReading">Currently Reading</option>
+          <option value="wantToRead">Want to Read</option>
+          <option value="read">Read</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+    );
+  }
 }
 
 class Bookshelf extends React.Component {
   static propTypes = {
     books: PropTypes.array.isRequired,
-    shelfName: PropTypes.string.isRequired
+    shelfName: PropTypes.string.isRequired,
+    handleShelfChange: PropTypes.func.isRequired
+  }
+
+  constructor(props) {
+    super(props);
+    // this.state = {shelf: props.shelf};
+    this.handleShelfChange = this.handleShelfChange.bind(this);
+  }
+
+  handleShelfChange(shelf, id) {
+    this.props.handleShelfChange(shelf, id);
   }
 
   render() {
@@ -55,6 +99,8 @@ class Bookshelf extends React.Component {
           title={book.title}
           shelf={book.shelf}
           img={book.imageLinks.thumbnail}
+          handleShelfChange={this.handleShelfChange}
+          id={book.id}
           key={book.title}
         />
       );
@@ -73,22 +119,31 @@ class Bookshelf extends React.Component {
 }
 
 class Library extends React.Component {
-  
-  // static propTypes = {
-  //   books: PropTypes.array.isRequired,
-  // }
   constructor(props) {
     super(props);
     this.state = {
       books: []
     };
+    this.handleShelfChange = this.handleShelfChange.bind(this);
+  }
+
+  handleShelfChange(shelf, id) {
+    this.setState((prevState) => ({
+      books: prevState.books.map( book => {
+        if (book.id === id) {
+          book.shelf = shelf;
+          return book;
+        } else {
+          return book;
+        }
+      })
+    }));
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => this.setState({
       books: books
     }), function(msg) {
-      console.log(msg);
     })
   }
 
@@ -106,14 +161,15 @@ class Library extends React.Component {
 
     const bookshelves = [];
 
-    shelves.forEach(function(shelf, key) {
+    for (const [key, shelf] of shelves) {
       bookshelves.push(
         <Bookshelf
           books={shelf}
           shelfName={key}
+          handleShelfChange={this.handleShelfChange}
           key={key} />
       );
-    });
+    }
 
     return (
       <div className="list-books">
