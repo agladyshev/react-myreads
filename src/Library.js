@@ -1,18 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 const Book = (props) => (
   <li>
     <div className="book">
       <div className="book-top">
-        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + props.book.url + ')' }}></div>
-        <ShelfChanger shelf={props.book.shelf}/>
+        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + props.url + ')' }}></div>
+        <ShelfChanger shelf={props.shelf}/>
       </div>
-      <div className="book-title">{props.book.title}</div>
-      <div className="book-authors">{props.book.author}</div>
+      <div className="book-title">{props.title}</div>
+      <div className="book-authors">{props.author}</div>
     </div>
   </li>  
 );
+
+Book.propTypes = {
+  title: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  shelf: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired
+}
 
 const ShelfChanger = (props) => (
   <div className="book-shelf-changer">
@@ -26,13 +34,26 @@ const ShelfChanger = (props) => (
   </div>
 );
 
+ShelfChanger.propTypes = {
+  shelf: PropTypes.string.isRequired
+}
+
 class Bookshelf extends React.Component {
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    shelfName: PropTypes.string.isRequired
+  }
+
   render() {
+    console.log(this.props);
     const shelf = [];
     this.props.books.forEach((book) => {
       shelf.push(
         <Book
-          book={book}
+          author={book.author}
+          title={book.title}
+          shelf={book.shelf}
+          url={book.url}
           key={book.title}
         />
       );
@@ -51,6 +72,11 @@ class Bookshelf extends React.Component {
 }
 
 class Library extends React.Component {
+  
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+  }
+
   render() {
     const shelves = new Map([]);
     this.props.books.forEach((book) => {
