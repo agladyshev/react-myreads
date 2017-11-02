@@ -65,13 +65,25 @@ const BOOKS = [
     author: 'David McCullough',
     url: 'http://books.google.com/books/content?id=uu1mC6zWNTwC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73pGHfBNSsJG9Y8kRBpmLUft9O4BfItHioHolWNKOdLavw-SLcXADy3CPAfJ0_qMb18RmCa7Ds1cTdpM3dxAGJs8zfCfm8c6ggBIjzKT7XR5FIB53HHOhnsT7a0Cc-PpneWq9zX&source=gbs_api',
     shelf: 'read'
+  },
+  {
+    title: "To Kill a Mockingbird 2",
+    author: "Harper Lee",
+    url: "http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api",
+    shelf: "Currently Reading"
+  },
+  {
+    title: '1776 2',
+    author: 'David McCullough',
+    url: 'http://books.google.com/books/content?id=uu1mC6zWNTwC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73pGHfBNSsJG9Y8kRBpmLUft9O4BfItHioHolWNKOdLavw-SLcXADy3CPAfJ0_qMb18RmCa7Ds1cTdpM3dxAGJs8zfCfm8c6ggBIjzKT7XR5FIB53HHOhnsT7a0Cc-PpneWq9zX&source=gbs_api',
+    shelf: 'Currently Reading'
   }
 ]
 
 class Bookshelf extends React.Component {
   render() {
+    console.log(this.props);
     const shelf = [];
-    console.log(this.props.books);
     this.props.books.forEach((book) => {
       shelf.push(
         <Book
@@ -82,7 +94,7 @@ class Bookshelf extends React.Component {
     });
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">Currently Reading</h2>
+        <h2 className="bookshelf-title">{this.props.shelfName}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
             {shelf}
@@ -95,6 +107,28 @@ class Bookshelf extends React.Component {
 
 class Library extends React.Component {
   render() {
+    const shelves = new Map([]);
+    this.props.books.forEach((book) => {
+      if (shelves.has(book.shelf)) {
+        const shelf = shelves.get(book.shelf);
+        shelf.push(book);
+        shelves.set(book.shelf, shelf);
+      } else {
+        shelves.set(book.shelf, [book]);
+      }}
+    )
+
+    const bookshelves = [];
+
+    shelves.forEach(function(shelf, key) {
+      bookshelves.push(
+        <Bookshelf
+          books={shelf}
+          shelfName={key}
+          key={key} />
+      );
+    });
+
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -102,7 +136,7 @@ class Library extends React.Component {
         </div>
         <div className="list-books-content">
           <div>
-            <Bookshelf books={BOOKS}/>
+            {bookshelves}
           </div>
         </div>
         <div className="open-search">
@@ -121,7 +155,7 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? <Search />: <Library />}
+        {this.state.showSearchPage ? <Search />: <Library books={BOOKS}/>}
       </div>
     )
   }
