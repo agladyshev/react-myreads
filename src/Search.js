@@ -11,7 +11,9 @@ class Search extends React.Component {
   }
 
   updateResults(query) {
-    query && BooksAPI.search(query, 20).then((books) => this.setState({books: books}));
+    query && BooksAPI.search(query, 20).then((books) => {
+      books.error ? this.setState({books: []}) : this.setState({books: books});
+    });
   }
 
   render() {
@@ -36,7 +38,6 @@ class SearchBar extends React.Component {
   updateQuery(event) {
     const query = event.target.value;
     this.setState({query: query});
-    console.log(query);
     this.props.updateResults(query);
   }
 
@@ -59,7 +60,7 @@ class SearchResults extends React.Component {
   }
 
   handleBookAdd(id, shelf) {
-    BooksAPI.update(id, shelf)
+    BooksAPI.update({'id': id}, shelf);
   }
 
   render() {
