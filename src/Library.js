@@ -2,24 +2,26 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
+import * as BooksAPI from './BooksAPI'
+
 const Book = (props) => (
   <li>
     <div className="book">
       <div className="book-top">
-        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + props.url + ')' }}></div>
+        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + props.img + ')' }}></div>
         <ShelfChanger shelf={props.shelf}/>
       </div>
       <div className="book-title">{props.title}</div>
-      <div className="book-authors">{props.author}</div>
+      <div className="book-authors">{props.authors}</div>
     </div>
   </li>  
 );
 
 Book.propTypes = {
   title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  authors: PropTypes.array.isRequired,
   shelf: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired
+  img: PropTypes.string.isRequired
 }
 
 const ShelfChanger = (props) => (
@@ -45,15 +47,14 @@ class Bookshelf extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const shelf = [];
     this.props.books.forEach((book) => {
       shelf.push(
         <Book
-          author={book.author}
+          authors={book.authors}
           title={book.title}
           shelf={book.shelf}
-          url={book.url}
+          img={book.imageLinks.thumbnail}
           key={book.title}
         />
       );
@@ -73,13 +74,27 @@ class Bookshelf extends React.Component {
 
 class Library extends React.Component {
   
-  static propTypes = {
-    books: PropTypes.array.isRequired,
+  // static propTypes = {
+  //   books: PropTypes.array.isRequired,
+  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      books: []
+    };
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then((books) => this.setState({
+      books: books
+    }), function(msg) {
+      console.log(msg);
+    })
   }
 
   render() {
     const shelves = new Map([]);
-    this.props.books.forEach((book) => {
+    this.state.books.forEach((book) => {
       if (shelves.has(book.shelf)) {
         const shelf = shelves.get(book.shelf);
         shelf.push(book);
