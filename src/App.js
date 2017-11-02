@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route } from 'react-router-dom'
 // import * as BooksAPI from './BooksAPI'
 import Library from './Library'
 import Search from './Search'
@@ -32,17 +33,18 @@ const BOOKS = [
 ]
 
 class BooksApp extends React.Component {
-  state = {
-    showSearchPage: false
-  }
-
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? <Search />: <Library books={BOOKS}/>}
+        <Route exact path='/' render={() => (
+          <Library books={BOOKS}/>
+        )}/>
+        <Route exact path='/search' render={() => (
+          <Search />
+        )}/>
       </div>
     )
   }
 }
 
-export default BooksApp
+export default BooksApp;
