@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Book from './Book'
 
-import * as BooksAPI from './BooksAPI'
-
 class Bookshelf extends React.Component {
   static propTypes = {
     books: PropTypes.array.isRequired,
@@ -19,6 +17,7 @@ class Bookshelf extends React.Component {
   }
 
   handleShelfChange(id, shelf) {
+    console.log('shelf');
     this.props.handleShelfChange(id, shelf);
   }
 
@@ -51,38 +50,24 @@ class Bookshelf extends React.Component {
 }
 
 class Library extends React.Component {
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    handleShelfChange: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props);
-    this.state = {
-      books: []
-    };
     this.handleShelfChange = this.handleShelfChange.bind(this);
   }
 
   handleShelfChange(id, shelf) {
-    this.setState((prevState) => ({
-      books: prevState.books.map( book => {
-        if (book.id === id) {
-          book.shelf = shelf;
-          BooksAPI.update(book, shelf);
-          return book;
-        } else {
-          return book;
-        }
-      })
-    }));
-  }
-
-  componentDidMount() {
-    BooksAPI.getAll().then((books) => this.setState({
-      books: books
-    }), function(msg) {
-    })
+    console.log('lib');
+    this.props.handleShelfChange(id, shelf);
   }
 
   render() {
     const shelves = new Map([]);
-    this.state.books.forEach((book) => {
+    this.props.books.forEach((book) => {
       if (shelves.has(book.shelf)) {
         const shelf = shelves.get(book.shelf);
         shelf.push(book);
