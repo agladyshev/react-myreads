@@ -132,12 +132,14 @@ class Library extends React.Component {
       books: prevState.books.map( book => {
         if (book.id === id) {
           book.shelf = shelf;
+          BooksAPI.update(book, shelf);
           return book;
         } else {
           return book;
         }
       })
     }));
+
   }
 
   componentDidMount() {
