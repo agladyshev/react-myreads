@@ -18,7 +18,6 @@ class BooksApp extends React.Component {
   }
 
   handleShelfChange(book, shelf) {
-    console.log(book);
     BooksAPI.update(book, shelf);
     if (book.temp) {
       this.setState((prevState) => {

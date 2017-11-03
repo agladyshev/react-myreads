@@ -10,7 +10,7 @@ class Search extends React.Component {
       searchResults: [],
     };
     this.updateResults = this.updateResults.bind(this);
-    this.handleBookAdd = this.handleBookAdd.bind(this);
+    this.handleShelfChange = this.handleShelfChange.bind(this);
   }
 
   updateResults(query) {
@@ -21,8 +21,9 @@ class Search extends React.Component {
     });
   }
 
-  handleBookAdd(book, shelf) {
-    book.temp = true;
+  handleShelfChange(book, shelf) {
+    // Add temp prop if book is not in the library
+    !this.props.bookToShelf.has(book.id) && (book.temp = true);
     this.props.handleShelfChange(book, shelf);
   }
 
@@ -33,7 +34,7 @@ class Search extends React.Component {
         {(this.state.searchResults) &&
           <SearchResults
             books={this.state.searchResults}
-            handleBookAdd={this.handleBookAdd} />
+            handleShelfChange={this.handleShelfChange} />
         }
       </div>
     ) 
@@ -68,12 +69,11 @@ class SearchBar extends React.Component {
 class SearchResults extends React.Component {
   constructor(props) {
     super(props);
-    this.handleBookAdd = this.handleBookAdd.bind(this);
+    this.handleShelfChange = this.handleShelfChange.bind(this);
   }
 
-  handleBookAdd(book, shelf) {
-    console.log(this.props)
-    this.props.handleBookAdd(book, shelf);
+  handleShelfChange(book, shelf) {
+    this.props.handleShelfChange(book, shelf);
   }
 
   render() {
@@ -85,7 +85,7 @@ class SearchResults extends React.Component {
           title={book.title}
           shelf={book.shelf}
           imageLinks={book.imageLinks}
-          handleShelfChange={this.handleBookAdd}
+          handleShelfChange={this.handleShelfChange}
           id={book.id}
           key={book.id}
         />

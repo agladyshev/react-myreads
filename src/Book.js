@@ -14,7 +14,6 @@ class Book extends React.Component {
 
   constructor(props) {
     super(props);
-    // this.state = {shelf: props.shelf};
     this.handleShelfChange = this.handleShelfChange.bind(this);
   }
 
