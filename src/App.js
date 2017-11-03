@@ -19,17 +19,18 @@ class BooksApp extends React.Component {
 
   handleShelfChange(book, shelf) {
     BooksAPI.update(book, shelf);
+    // Make temp changes to state
     if (book.temp) {
+      // If new book is being added
       this.setState((prevState) => {
         prevState.books.push(book);
-        return { books: prevState.books };  
+        prevState.bookToShelf.set(book.id, shelf);
+        return { books: prevState.books, bookToShelf: prevState.bookToShelf };  
       })
-      
     } else {
       this.setState((prevState) => ({
         books: prevState.books.filter( prevBook => {
           if (prevBook.id === book.id) {
-            // BooksAPI.update(book, shelf);
             if (shelf !== 'none') {
               prevBook.shelf = shelf;
               return prevBook;
@@ -44,10 +45,7 @@ class BooksApp extends React.Component {
         prevState.bookToShelf.delete(book.id);
         return {bookToShelf: prevState.bookToShelf};
       });
-
     }
-
-
   }
 
   componentDidMount() {

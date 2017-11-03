@@ -1,23 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
+import PropTypes from 'prop-types'
 import Book from './Book'
 
 class Search extends React.Component {
+  static propTypes = {
+    bookToShelf: PropTypes.instanceOf(Map).isRequired,
+    handleShelfChange: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       searchResults: [],
+      query: ''
     };
     this.updateResults = this.updateResults.bind(this);
     this.handleShelfChange = this.handleShelfChange.bind(this);
   }
 
   updateResults(query) {
+    this.setState({query: query})
     const bookToShelf = this.props.bookToShelf;
-    query && BooksAPI.search(query, 20).then((books) => {
-      (books) && (books.forEach((book) => {(bookToShelf.has(book.id)) && (book.shelf = bookToShelf.get(book.id))})); 
-      books.error ? this.setState({searchResults: []}) : this.setState({searchResults: books});
+    !query ? this.setState({searchResults: []}) : BooksAPI.search(query, 20).then((books) => {
+      if (!this.state.query || books.error) {
+        // We make sure query is still typed when valid when callback is returned
+        // If search results are empty, error object is returned
+        this.setState({searchResults: []})
+      } else {
+        // This oneliner updates shelf value if book is already in the library
+        books.forEach((book) => {(bookToShelf.has(book.id)) && (book.shelf = bookToShelf.get(book.id))});
+        this.setState({searchResults: books})
+      }
     });
   }
 
@@ -42,6 +57,10 @@ class Search extends React.Component {
 }
 
 class SearchBar extends React.Component {
+  static propTypes = {
+    updateResults: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props);
     this.state = {query: ''};
@@ -67,6 +86,11 @@ class SearchBar extends React.Component {
 }
 
 class SearchResults extends React.Component {
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    handleShelfChange: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props);
     this.handleShelfChange = this.handleShelfChange.bind(this);
