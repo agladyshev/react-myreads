@@ -29,13 +29,15 @@ class Book extends React.Component {
   }
 
   render() {
-    const img = this.props.imageLinks.thumbnail
+    console.log(this.props)
     return (
       <li>
         <div className='book'>
           <div className='book-top'>
-            <div className='book-cover' style={{ width: 128, height: 193,
-              backgroundImage: 'url(' + img + ')' }}></div>
+            {(this.props.imageLinks) &&
+              <div className='book-cover' style={{ width: 128, height: 193,
+                backgroundImage: 'url(' + this.props.imageLinks.thumbnail + ')' }}></div>
+            }
             <ShelfChanger
               shelf={this.props.shelf}
               onShelfChange={this.handleShelfChange}/>

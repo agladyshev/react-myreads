@@ -45,6 +45,7 @@ class Search extends React.Component {
   }
 
   render() {
+    console.log(this.state.searchResults)
     return (
       <div className='search-books'>
         <SearchBar updateResults={this.updateResults}/>
@@ -104,6 +105,7 @@ class SearchResults extends React.Component {
   }
 
   render() {
+    console.log(this.props.books)
     const results = []
     this.props.books.forEach((book) => {
       results.push(
