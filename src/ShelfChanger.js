@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
 
 
@@ -9,29 +9,29 @@ class ShelfChanger extends React.Component {
   }
 
   constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
+    super(props)
+    this.handleChange = this.handleChange.bind(this)
   }
 
   handleChange(event) {
-    this.props.onShelfChange(event.target.value);
+    this.props.onShelfChange(event.target.value)
   }
 
   render() {
-    const shelf = this.props.shelf;
+    const shelf = this.props.shelf
     return (
-      <div className="book-shelf-changer">
+      <div className='book-shelf-changer'>
         <select value={shelf} onChange={this.handleChange}>
-          <option value="none" disabled>Move to...</option>
-          <option value="currentlyReading">Currently Reading</option>
-          <option value="wantToRead">Want to Read</option>
-          <option value="read">Read</option>
+          <option value='none' disabled>Move to...</option>
+          <option value='currentlyReading'>Currently Reading</option>
+          <option value='wantToRead'>Want to Read</option>
+          <option value='read'>Read</option>
           {(shelf) &&
-            <option value="none">None</option>
+            <option value='none'>None</option>
           }
         </select>
       </div>
-    );
+    )
   }
 }
 

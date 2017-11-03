@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Book from './Book'
@@ -11,18 +11,17 @@ class Bookshelf extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
     // this.state = {shelf: props.shelf};
-    this.handleShelfChange = this.handleShelfChange.bind(this);
+    this.handleShelfChange = this.handleShelfChange.bind(this)
   }
 
   handleShelfChange(book, shelf) {
-    console.log('shelf');
-    this.props.handleShelfChange(book, shelf);
+    this.props.handleShelfChange(book, shelf)
   }
 
   render() {
-    const shelf = [];
+    const shelf = []
     this.props.books.forEach((book) => {
       shelf.push(
         <Book
@@ -34,13 +33,15 @@ class Bookshelf extends React.Component {
           id={book.id}
           key={book.title}
         />
-      );
-    });
+      )
+    })
     return (
-      <div className="bookshelf">
-        <h2 className="bookshelf-title">{this.props.shelfName.replace(/([A-Z])/g, ' $1').toUpperCase()}</h2>
-        <div className="bookshelf-books">
-          <ol className="books-grid">
+      <div className='bookshelf'>
+        <h2 className='bookshelf-title'>
+          {this.props.shelfName.replace(/([A-Z])/g, ' $1').toUpperCase()}
+        </h2>
+        <div className='bookshelf-books'>
+          <ol className='books-grid'>
             {shelf}
           </ol>
         </div>
@@ -56,29 +57,30 @@ class Library extends React.Component {
   }
 
   constructor(props) {
-    super(props);
-    this.handleShelfChange = this.handleShelfChange.bind(this);
+    super(props)
+    this.handleShelfChange = this.handleShelfChange.bind(this)
   }
 
   handleShelfChange(book, shelf) {
-    console.log('lib');
-    this.props.handleShelfChange(book, shelf);
+    this.props.handleShelfChange(book, shelf)
   }
 
   render() {
-    const shelves = new Map([]);
+    // Shelves are created dynamically from book shelf property
+    // This way, we can add more values in the future easily.
+    // e.g., 'to buy' or 'lent'
+    // The downside is that the Map object iterates in insertion order
+    const shelves = new Map([])
     this.props.books.forEach((book) => {
       if (shelves.has(book.shelf)) {
-        const shelf = shelves.get(book.shelf);
-        shelf.push(book);
-        shelves.set(book.shelf, shelf);
+        const shelf = shelves.get(book.shelf)
+        shelf.push(book)
+        shelves.set(book.shelf, shelf)
       } else {
-        shelves.set(book.shelf, [book]);
-      }}
-    )
-
-    const bookshelves = [];
-
+        shelves.set(book.shelf, [book])
+      }
+    })
+    const bookshelves = []
     for (const [key, shelf] of shelves) {
       bookshelves.push(
         <Bookshelf
@@ -86,20 +88,20 @@ class Library extends React.Component {
           shelfName={key}
           handleShelfChange={this.handleShelfChange}
           key={key} />
-      );
+      )
     }
 
     return (
-      <div className="list-books">
-        <div className="list-books-title">
+      <div className='list-books'>
+        <div className='list-books-title'>
           <h1>MyReads</h1>
         </div>
-        <div className="list-books-content">
+        <div className='list-books-content'>
           <div>
             {bookshelves}
           </div>
         </div>
-        <div className="open-search">
+        <div className='open-search'>
           <Link to='/search'>Add a book</Link>
         </div>
       </div>

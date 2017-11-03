@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
 import ShelfChanger from './ShelfChanger'
 
@@ -13,8 +13,8 @@ class Book extends React.Component {
   }
 
   constructor(props) {
-    super(props);
-    this.handleShelfChange = this.handleShelfChange.bind(this);
+    super(props)
+    this.handleShelfChange = this.handleShelfChange.bind(this)
   }
 
   handleShelfChange(shelf) {
@@ -24,25 +24,27 @@ class Book extends React.Component {
       authors: this.props.authors,
       imageLinks: this.props.imageLinks,
       shelf: shelf
-    };
-    this.props.handleShelfChange(book, shelf);
+    }
+    this.props.handleShelfChange(book, shelf)
   }
 
-  render () {
+  render() {
+    const img = this.props.imageLinks.thumbnail
     return (
       <li>
-        <div className="book">
-          <div className="book-top">
-            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + this.props.imageLinks.thumbnail + ')' }}></div>
-            <ShelfChanger 
+        <div className='book'>
+          <div className='book-top'>
+            <div className='book-cover' style={{ width: 128, height: 193,
+              backgroundImage: 'url(' + img + ')' }}></div>
+            <ShelfChanger
               shelf={this.props.shelf}
               onShelfChange={this.handleShelfChange}/>
           </div>
-          <div className="book-title">{this.props.title}</div>
-          <div className="book-authors">{this.props.authors}</div>
+          <div className='book-title'>{this.props.title}</div>
+          <div className='book-authors'>{this.props.authors}</div>
         </div>
       </li>
-    );  
+    )
   }
 }
 
