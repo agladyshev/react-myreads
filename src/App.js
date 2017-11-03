@@ -18,24 +18,37 @@ class BooksApp extends React.Component {
   }
 
   handleShelfChange(book, shelf) {
-    this.setState((prevState) => ({
-      books: prevState.books.filter( prevBook => {
-        if (prevBook.id === book.id) {
-          BooksAPI.update(book, shelf);
-          if (shelf !== 'none') {
-            prevBook.shelf = shelf;
+    console.log(book);
+    BooksAPI.update(book, shelf);
+    if (book.temp) {
+      this.setState((prevState) => {
+        prevState.books.push(book);
+        return { books: prevState.books };  
+      })
+      
+    } else {
+      this.setState((prevState) => ({
+        books: prevState.books.filter( prevBook => {
+          if (prevBook.id === book.id) {
+            // BooksAPI.update(book, shelf);
+            if (shelf !== 'none') {
+              prevBook.shelf = shelf;
+              return prevBook;
+            }
+            return false;
+          } else {
             return prevBook;
           }
-          return false;
-        } else {
-          return prevBook;
-        }
-      })
-    }));
-    shelf === 'none' && this.setState((prevState) => {
-      prevState.bookToShelf.delete(book.id);
-      return {bookToShelf: prevState.bookToShelf};
-    });
+        })
+      }));
+      shelf === 'none' && this.setState((prevState) => {
+        prevState.bookToShelf.delete(book.id);
+        return {bookToShelf: prevState.bookToShelf};
+      });
+
+    }
+
+
   }
 
   componentDidMount() {
@@ -58,7 +71,7 @@ class BooksApp extends React.Component {
           <Library books={this.state.books} handleShelfChange={this.handleShelfChange}/>
         )}/>
         <Route exact path='/search' render={() => (
-          <Search bookToShelf={this.state.bookToShelf}/>
+          <Search bookToShelf={this.state.bookToShelf} handleShelfChange={this.handleShelfChange}/>
         )}/>
       </div>
     )

@@ -21,8 +21,9 @@ class Search extends React.Component {
     });
   }
 
-  handleBookAdd(id, shelf) {
-    BooksAPI.update({'id': id}, shelf);
+  handleBookAdd(book, shelf) {
+    book.temp = true;
+    this.props.handleShelfChange(book, shelf);
   }
 
   render() {
@@ -70,9 +71,9 @@ class SearchResults extends React.Component {
     this.handleBookAdd = this.handleBookAdd.bind(this);
   }
 
-  handleBookAdd(id, shelf) {
+  handleBookAdd(book, shelf) {
     console.log(this.props)
-    this.props.handleBookAdd(id, shelf);
+    this.props.handleBookAdd(book, shelf);
   }
 
   render() {
@@ -83,7 +84,7 @@ class SearchResults extends React.Component {
           authors={book.authors}
           title={book.title}
           shelf={book.shelf}
-          img={book.imageLinks.thumbnail}
+          imageLinks={book.imageLinks}
           handleShelfChange={this.handleBookAdd}
           id={book.id}
           key={book.id}

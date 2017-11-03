@@ -7,7 +7,7 @@ class Book extends React.Component {
     title: PropTypes.string.isRequired,
     authors: PropTypes.array,
     shelf: PropTypes.string,
-    img: PropTypes.string.isRequired,
+    imageLinks: PropTypes.object,
     id: PropTypes.string.isRequired,
     handleShelfChange: PropTypes.func.isRequired
   }
@@ -23,8 +23,8 @@ class Book extends React.Component {
       id: this.props.id,
       title: this.props.title,
       authors: this.props.authors,
-      img: this.props.img,
-      shelf: this.props.shelf
+      imageLinks: this.props.imageLinks,
+      shelf: shelf
     };
     this.props.handleShelfChange(book, shelf);
   }
@@ -34,7 +34,7 @@ class Book extends React.Component {
       <li>
         <div className="book">
           <div className="book-top">
-            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + this.props.img + ')' }}></div>
+            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + this.props.imageLinks.thumbnail + ')' }}></div>
             <ShelfChanger 
               shelf={this.props.shelf}
               onShelfChange={this.handleShelfChange}/>

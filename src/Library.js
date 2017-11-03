@@ -29,7 +29,7 @@ class Bookshelf extends React.Component {
           authors={book.authors}
           title={book.title}
           shelf={book.shelf}
-          img={book.imageLinks.thumbnail}
+          imageLinks={book.imageLinks}
           handleShelfChange={this.handleShelfChange}
           id={book.id}
           key={book.title}
