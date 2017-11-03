@@ -19,7 +19,14 @@ class Book extends React.Component {
   }
 
   handleShelfChange(shelf) {
-    this.props.handleShelfChange(this.props.id, shelf);
+    const book = {
+      id: this.props.id,
+      title: this.props.title,
+      authors: this.props.authors,
+      img: this.props.img,
+      shelf: this.props.shelf
+    };
+    this.props.handleShelfChange(book, shelf);
   }
 
   render () {

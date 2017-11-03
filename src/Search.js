@@ -10,6 +10,7 @@ class Search extends React.Component {
       searchResults: [],
     };
     this.updateResults = this.updateResults.bind(this);
+    this.handleBookAdd = this.handleBookAdd.bind(this);
   }
 
   updateResults(query) {
@@ -20,8 +21,8 @@ class Search extends React.Component {
     });
   }
 
-  handleBookAdd() {
-    
+  handleBookAdd(id, shelf) {
+    BooksAPI.update({'id': id}, shelf);
   }
 
   render() {
@@ -29,7 +30,9 @@ class Search extends React.Component {
       <div className="search-books">
         <SearchBar updateResults={this.updateResults}/>
         {(this.state.searchResults) &&
-          <SearchResults books={this.state.searchResults}/>
+          <SearchResults
+            books={this.state.searchResults}
+            handleBookAdd={this.handleBookAdd} />
         }
       </div>
     ) 
@@ -68,7 +71,8 @@ class SearchResults extends React.Component {
   }
 
   handleBookAdd(id, shelf) {
-    BooksAPI.update({'id': id}, shelf);
+    console.log(this.props)
+    this.props.handleBookAdd(id, shelf);
   }
 
   render() {

@@ -17,23 +17,23 @@ class BooksApp extends React.Component {
     this.handleShelfChange = this.handleShelfChange.bind(this);
   }
 
-  handleShelfChange(id, shelf) {
+  handleShelfChange(book, shelf) {
     this.setState((prevState) => ({
-      books: prevState.books.filter( book => {
-        if (book.id === id) {
+      books: prevState.books.filter( prevBook => {
+        if (prevBook.id === book.id) {
           BooksAPI.update(book, shelf);
           if (shelf !== 'none') {
-            book.shelf = shelf;
-            return book;
+            prevBook.shelf = shelf;
+            return prevBook;
           }
           return false;
         } else {
-          return book;
+          return prevBook;
         }
       })
     }));
-    this.setState((prevState) => {
-      prevState.bookToShelf.delete(id);
+    shelf === 'none' && this.setState((prevState) => {
+      prevState.bookToShelf.delete(book.id);
       return {bookToShelf: prevState.bookToShelf};
     });
   }

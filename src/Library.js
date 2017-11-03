@@ -16,9 +16,9 @@ class Bookshelf extends React.Component {
     this.handleShelfChange = this.handleShelfChange.bind(this);
   }
 
-  handleShelfChange(id, shelf) {
+  handleShelfChange(book, shelf) {
     console.log('shelf');
-    this.props.handleShelfChange(id, shelf);
+    this.props.handleShelfChange(book, shelf);
   }
 
   render() {
@@ -60,9 +60,9 @@ class Library extends React.Component {
     this.handleShelfChange = this.handleShelfChange.bind(this);
   }
 
-  handleShelfChange(id, shelf) {
+  handleShelfChange(book, shelf) {
     console.log('lib');
-    this.props.handleShelfChange(id, shelf);
+    this.props.handleShelfChange(book, shelf);
   }
 
   render() {
