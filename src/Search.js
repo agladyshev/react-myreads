@@ -6,22 +6,39 @@ import Book from './Book'
 class Search extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {books: []};
+    this.state = {
+      searchResults: [],
+      bookToShelf: new Map()
+    };
     this.updateResults = this.updateResults.bind(this);
   }
 
   updateResults(query) {
+    const bookToShelf = this.state.bookToShelf;
     query && BooksAPI.search(query, 20).then((books) => {
-      books.error ? this.setState({books: []}) : this.setState({books: books});
+      (books) && (books.forEach((book) => {(bookToShelf.has(book.id)) && (book.shelf = bookToShelf.get(book.id))})); 
+      books.error ? this.setState({searchResults: []}) : this.setState({searchResults: books});
     });
+  }
+
+  handleBookAdd() {
+    
+  }
+
+  componentWillReceiveProps(nextprops) {
+    console.log(nextprops.books);
+    nextprops.books.forEach((book) => {
+      this.state.bookToShelf.set(book.id, book.shelf);
+    })
+    console.log(this.state.bookToShelf);
   }
 
   render() {
     return (
       <div className="search-books">
         <SearchBar updateResults={this.updateResults}/>
-        {(this.state.books) &&
-          <SearchResults books={this.state.books}/>
+        {(this.state.searchResults) &&
+          <SearchResults books={this.state.searchResults}/>
         }
       </div>
     ) 
