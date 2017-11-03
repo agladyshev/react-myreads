@@ -11,7 +11,8 @@ class BooksApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: []
+      books: [],
+      bookToShelf: new Map()
     };
     this.handleShelfChange = this.handleShelfChange.bind(this);
   }
@@ -32,9 +33,15 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
-    BooksAPI.getAll().then((books) => this.setState({
-      books: books
-    }), function(msg) {
+    BooksAPI.getAll().then((books) => {
+      const bookToShelf = new Map();
+      books.forEach((book) => {
+        bookToShelf.set(book.id, book.shelf);
+      });
+      this.setState({
+        books: books,
+        bookToShelf: bookToShelf
+      })
     })
   }
 
@@ -45,7 +52,7 @@ class BooksApp extends React.Component {
           <Library books={this.state.books} handleShelfChange={this.handleShelfChange}/>
         )}/>
         <Route exact path='/search' render={() => (
-          <Search books={this.state.books}/>
+          <Search bookToShelf={this.state.bookToShelf}/>
         )}/>
       </div>
     )

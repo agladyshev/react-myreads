@@ -8,13 +8,12 @@ class Search extends React.Component {
     super(props);
     this.state = {
       searchResults: [],
-      bookToShelf: new Map()
     };
     this.updateResults = this.updateResults.bind(this);
   }
 
   updateResults(query) {
-    const bookToShelf = this.state.bookToShelf;
+    const bookToShelf = this.props.bookToShelf;
     query && BooksAPI.search(query, 20).then((books) => {
       (books) && (books.forEach((book) => {(bookToShelf.has(book.id)) && (book.shelf = bookToShelf.get(book.id))})); 
       books.error ? this.setState({searchResults: []}) : this.setState({searchResults: books});
@@ -23,14 +22,6 @@ class Search extends React.Component {
 
   handleBookAdd() {
     
-  }
-
-  componentWillReceiveProps(nextprops) {
-    console.log(nextprops.books);
-    nextprops.books.forEach((book) => {
-      this.state.bookToShelf.set(book.id, book.shelf);
-    })
-    console.log(this.state.bookToShelf);
   }
 
   render() {
