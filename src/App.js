@@ -21,11 +21,11 @@ class BooksApp extends React.Component {
     this.setState((prevState) => ({
       books: prevState.books.filter( book => {
         if (book.id === id) {
+          BooksAPI.update(book, shelf);
           if (shelf !== 'none') {
             book.shelf = shelf;
             return book;
           }
-          BooksAPI.update(book, shelf);
           return false;
         } else {
           return book;
