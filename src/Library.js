@@ -31,7 +31,7 @@ class Bookshelf extends React.Component {
           imageLinks={book.imageLinks}
           handleShelfChange={this.handleShelfChange}
           id={book.id}
-          key={book.title}
+          key={book.id}
         />
       )
     })
